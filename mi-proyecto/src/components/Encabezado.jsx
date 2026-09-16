@@ -5,7 +5,7 @@ const Encabezado = () => {
     <header>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div className="container">
-          <span className="navbar-brand">Sitio TP2</span>
+          <span className="navbar-brand">React + Vite</span>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
