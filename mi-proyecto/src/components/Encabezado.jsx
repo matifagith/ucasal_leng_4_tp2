@@ -16,7 +16,6 @@ const Encabezado = () => {
     if (bsOffcanvasRef.current) {
       bsOffcanvasRef.current.hide();
     }
-    // Limpieza de seguridad por si queda el backdrop en el DOM tras la navegación en React
     setTimeout(() => {
       const backdrops = document.querySelectorAll('.offcanvas-backdrop, .modal-backdrop');
       backdrops.forEach(backdrop => backdrop.remove());
@@ -36,9 +35,7 @@ const Encabezado = () => {
     <header>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div className="container">
-          <NavLink to="/" className="navbar-brand" onClick={cerrarMenu}>React + Vite</NavLink>
-          
-          {/* 1. Botón "hamburguesa" controlado por script en React */}
+          <NavLink to="/" className="navbar-brand" onClick={cerrarMenu}>React + Vite</NavLink>                  
           <button 
             className="navbar-toggler" 
             type="button" 
@@ -48,8 +45,6 @@ const Encabezado = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-
-          {/* 2. Contenedor del menú lateral (Offcanvas en móvil, navbar en desktop) */}
           <div 
             ref={offcanvasRef}
             className="offcanvas-lg offcanvas-end text-bg-dark" 
