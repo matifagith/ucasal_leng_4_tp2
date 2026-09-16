@@ -8,7 +8,7 @@ import NoEncontrado from './pages/NoEncontrado';
 
 function App() {
   return (
-    <BrowserRouter basename="/ucasal_leng_4_tp2/">
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="d-flex flex-column min-vh-100">
         <Encabezado />
         <main className="container mt-5 flex-grow-1">
