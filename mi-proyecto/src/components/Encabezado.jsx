@@ -1,36 +1,68 @@
+import { useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Offcanvas } from 'bootstrap';
 
 const Encabezado = () => {
+  const offcanvasRef = useRef(null);
+  const bsOffcanvasRef = useRef(null);
+
+  useEffect(() => {
+    if (offcanvasRef.current) {
+      bsOffcanvasRef.current = Offcanvas.getOrCreateInstance(offcanvasRef.current);
+    }
+  }, []);
+
+  const cerrarMenu = () => {
+    if (bsOffcanvasRef.current) {
+      bsOffcanvasRef.current.hide();
+    }
+    // Limpieza de seguridad por si queda el backdrop en el DOM tras la navegación en React
+    setTimeout(() => {
+      const backdrops = document.querySelectorAll('.offcanvas-backdrop, .modal-backdrop');
+      backdrops.forEach(backdrop => backdrop.remove());
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }, 150);
+  };
+
+  const alternarMenu = (e) => {
+    e.preventDefault();
+    if (bsOffcanvasRef.current) {
+      bsOffcanvasRef.current.toggle();
+    }
+  };
+
   return (
     <header>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div className="container">
-          <span className="navbar-brand">Sitio TP2</span>
+          <NavLink to="/" className="navbar-brand" onClick={cerrarMenu}>React + Vite</NavLink>
           
-          {/* Botón hamburguesa visible solo en móviles */}
+          {/* 1. Botón "hamburguesa" controlado por script en React */}
           <button 
             className="navbar-toggler" 
             type="button" 
-            data-bs-toggle="offcanvas" 
-            data-bs-target="#menuLateral" 
+            onClick={alternarMenu}
             aria-controls="menuLateral"
+            aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          {/* Menú lateral (Offcanvas) */}
+          {/* 2. Contenedor del menú lateral (Offcanvas en móvil, navbar en desktop) */}
           <div 
-            className="offcanvas offcanvas-end text-bg-dark" 
+            ref={offcanvasRef}
+            className="offcanvas-lg offcanvas-end text-bg-dark" 
             tabIndex="-1" 
             id="menuLateral" 
             aria-labelledby="menuLateralLabel"
           >
             <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="menuLateralLabel">Navegación</h5>
+              <h5 className="offcanvas-title" id="menuLateralLabel">Menú</h5>
               <button 
                 type="button" 
                 className="btn-close btn-close-white" 
-                data-bs-dismiss="offcanvas" 
+                onClick={cerrarMenu}
                 aria-label="Cerrar"
               ></button>
             </div>
@@ -40,8 +72,8 @@ const Encabezado = () => {
                 <li className="nav-item">
                   <NavLink 
                     to="/" 
-                    className={({ isActive }) => isActive ? "nav-link text-danger fw-bold" : "nav-link"}
-                    data-bs-dismiss="offcanvas"
+                    className={({ isActive }) => isActive ? "nav-link text-danger fw-bold active" : "nav-link"}
+                    onClick={cerrarMenu}
                   >
                     Inicio
                   </NavLink>
@@ -49,8 +81,8 @@ const Encabezado = () => {
                 <li className="nav-item">
                   <NavLink 
                     to="/servicios" 
-                    className={({ isActive }) => isActive ? "nav-link text-danger fw-bold" : "nav-link"}
-                    data-bs-dismiss="offcanvas"
+                    className={({ isActive }) => isActive ? "nav-link text-danger fw-bold active" : "nav-link"}
+                    onClick={cerrarMenu}
                   >
                     Servicios
                   </NavLink>
@@ -58,8 +90,8 @@ const Encabezado = () => {
                 <li className="nav-item">
                   <NavLink 
                     to="/contacto" 
-                    className={({ isActive }) => isActive ? "nav-link text-danger fw-bold" : "nav-link"}
-                    data-bs-dismiss="offcanvas"
+                    className={({ isActive }) => isActive ? "nav-link text-danger fw-bold active" : "nav-link"}
+                    onClick={cerrarMenu}
                   >
                     Contacto
                   </NavLink>
