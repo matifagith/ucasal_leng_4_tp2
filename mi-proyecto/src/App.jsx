@@ -8,7 +8,8 @@ import NoEncontrado from './pages/NoEncontrado';
 
 function App() {
   return (
-    <BrowserRouter>
+    // ¡Aquí agregamos el basename para que funcione en GitHub Pages!
+    <BrowserRouter basename="/ucasal_leng_4_tp2/">
       <div className="d-flex flex-column min-vh-100">
         <Encabezado />
         
