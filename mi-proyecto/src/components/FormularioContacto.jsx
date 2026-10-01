@@ -20,7 +20,6 @@ const FormularioContacto = () => {
     }
   });
 
-  // Contador dinámico de caracteres utilizando useWatch
   const mensajeTexto = useWatch({ control, name: 'mensaje' }) || '';
   const contadorCaracteres = mensajeTexto.length;
 
@@ -28,7 +27,6 @@ const FormularioContacto = () => {
     setSubmitSuccess(false);
     setSubmitError('');
 
-    // Credenciales obtenidas mediante variables de entorno
     const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
@@ -81,8 +79,7 @@ const FormularioContacto = () => {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        {/* Campo Nombre y Apellido */}
-        <div className="mb-3">
+          <div className="mb-3">
           <label htmlFor="nombre" className="form-label text-dark fw-semibold">
             Nombre y Apellido <span className="text-danger">*</span>
           </label>
@@ -104,7 +101,6 @@ const FormularioContacto = () => {
           )}
         </div>
 
-        {/* Campo Correo Electrónico */}
         <div className="mb-3">
           <label htmlFor="email" className="form-label text-dark fw-semibold">
             Correo Electrónico <span className="text-danger">*</span>
@@ -127,7 +123,6 @@ const FormularioContacto = () => {
           )}
         </div>
 
-        {/* Campo Mensaje */}
         <div className="mb-3">
           <div className="d-flex justify-content-between align-items-center mb-1">
             <label htmlFor="mensaje" className="form-label text-dark fw-semibold mb-0">
@@ -155,7 +150,6 @@ const FormularioContacto = () => {
           )}
         </div>
 
-        {/* Botón de Envío */}
         <div className="mt-4">
           <button
             type="submit"
