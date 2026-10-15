@@ -12,22 +12,54 @@ const Contacto = () => {
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
   const [error, setError] = useState('');
+const [fieldErrors, setFieldErrors] = useState({});
+const maxMessageLength = 300;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+// Función de validación del formulario
+const validate = () => {
+  const errors = {};
+
+  // Nombre: al menos dos palabras, solo letras y espacios
+  if (!formData.nombre.trim()) {
+    errors.nombre = 'El nombre es obligatorio.';
+  } else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñ]+)+$/.test(formData.nombre.trim())) {
+    errors.nombre = 'Introduce nombre y apellido (solo letras).';
+  }
+
+  // Email: formato básico
+  if (!formData.email.trim()) {
+    errors.email = 'El correo es obligatorio.';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    errors.email = 'Introduce un correo electrónico válido.';
+  }
+
+  // Mensaje: obligatorio y máximo 300 caracteres
+  if (!formData.mensaje.trim()) {
+    errors.mensaje = 'El mensaje es obligatorio.';
+  } else if (formData.mensaje.length > maxMessageLength) {
+    errors.mensaje = `El mensaje no puede superar los ${maxMessageLength} caracteres.`;
+  }
+
+  setFieldErrors(errors);
+  return Object.keys(errors).length === 0;
+};
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value
+  }));
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setEnviado(false);
 
-    if (!formData.nombre.trim() || !formData.email.trim() || !formData.mensaje.trim()) {
-      setError('Por favor, completa los campos obligatorios.');
+    // Validaciones de campos
+    if (!validate()) {
+      setError('Corrige los errores del formulario antes de enviarlo.');
       return;
     }
 
@@ -138,6 +170,7 @@ const Contacto = () => {
                   onChange={handleChange}
                   required
                 />
+{fieldErrors.nombre && <div className="text-danger mt-1">{fieldErrors.nombre}</div>}
               </div>
 
               <div className="mb-3">
@@ -154,6 +187,7 @@ const Contacto = () => {
                   onChange={handleChange}
                   required
                 />
+{fieldErrors.email && <div className="text-danger mt-1">{fieldErrors.email}</div>}
               </div>
 
               <div className="mb-3">
@@ -175,7 +209,7 @@ const Contacto = () => {
                 <label htmlFor="mensaje" className="form-label fw-semibold text-dark">
                   Mensaje <span className="text-danger">*</span>
                 </label>
-                <textarea
+                                <textarea
                   id="mensaje"
                   name="mensaje"
                   rows="4"
@@ -184,7 +218,9 @@ const Contacto = () => {
                   value={formData.mensaje}
                   onChange={handleChange}
                   required
+                  maxLength={maxMessageLength}
                 ></textarea>
+                {fieldErrors.mensaje && <div className="text-danger mt-1">{fieldErrors.mensaje}</div>}
               </div>
 
               <button
