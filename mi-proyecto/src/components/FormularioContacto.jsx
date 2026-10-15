@@ -52,7 +52,6 @@ const FormularioContacto = () => {
 
   return (
     <div className="card shadow-sm border-0 p-4 text-start">
-      {/* <h2 className="h4 text-warning fw-bold mb-3">Envíanos una consulta</h2> */}
 
       {submitSuccess && (
         <div className="alert alert-success alert-dismissible fade show mb-3" role="alert">

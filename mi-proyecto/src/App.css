@@ -183,7 +183,6 @@
   }
 }
 
-/* Estilos personalizados para el Formulario de Contacto (TP3) */
 .contact-form-card {
   background-color: var(--bg);
   border: 1px solid var(--border) !important;
@@ -237,3 +236,11 @@
   cursor: not-allowed;
 }
 
+.transition-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.transition-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 32px rgba(76, 29, 149, 0.22) !important;
+}
