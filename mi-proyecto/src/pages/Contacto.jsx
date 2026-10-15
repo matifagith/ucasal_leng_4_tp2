@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +9,9 @@ const Contacto = () => {
     mensaje: ''
   });
 
+  const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,23 +21,48 @@ const Contacto = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setEnviado(false);
 
     if (!formData.nombre.trim() || !formData.email.trim() || !formData.mensaje.trim()) {
-      alert('Por favor, completa los campos obligatorios.');
+      setError('Por favor, completa los campos obligatorios.');
       return;
     }
 
-    console.log('Datos del formulario enviados:', formData);
-    setEnviado(true);
+    setEnviando(true);
 
-    setFormData({
-      nombre: '',
-      email: '',
-      asunto: '',
-      mensaje: ''
-    });
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          nombre: formData.nombre,
+          email: formData.email,
+          asunto: formData.asunto,
+          mensaje: formData.mensaje
+        },
+        publicKey
+      );
+
+      setEnviado(true);
+      setFormData({
+        nombre: '',
+        email: '',
+        asunto: '',
+        mensaje: ''
+      });
+    } catch (err) {
+      console.error('Error al enviar el email:', err);
+      setError('Ocurrió un error al enviar el mensaje. Por favor, intenta de nuevo.');
+    } finally {
+      setEnviando(false);
+    }
   };
 
   return (
@@ -73,11 +101,23 @@ const Contacto = () => {
 
             {enviado && (
               <div className="alert alert-success alert-dismissible fade show mb-3" role="alert">
-                ¡Gracias por comunicarte! Tu mensaje fue procesado correctamente.
+                ¡Gracias por comunicarte! Tu mensaje fue enviado con éxito.
                 <button
                   type="button"
                   className="btn-close"
                   onClick={() => setEnviado(false)}
+                  aria-label="Cerrar"
+                ></button>
+              </div>
+            )}
+
+            {error && (
+              <div className="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                {error}
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setError('')}
                   aria-label="Cerrar"
                 ></button>
               </div>
@@ -150,8 +190,16 @@ const Contacto = () => {
               <button
                 type="submit"
                 className="btn btn-warning w-100 fw-bold text-dark py-2 shadow-sm"
+                disabled={enviando}
               >
-                Enviar Mensaje
+                {enviando ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Enviando...
+                  </>
+                ) : (
+                  'Enviar Mensaje'
+                )}
               </button>
             </form>
           </div>
